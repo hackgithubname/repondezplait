@@ -1,25 +1,31 @@
-(defproject delta-auto "0.1.0"
+(defproject repondezplait "0.1.0"
   :dependencies [[org.clojure/clojure "1.6.0"]
-                 [org.clojure/clojurescript "0.0-2322"]
-                 [environ "1.0.0"]
-                 [compojure "1.1.8"]
+                 ;; [org.clojure/clojurescript "0.0-2322"]
+                 ;; [environ "1.0.0"]
+                 [compojure "1.2.1"]
                  [ring/ring-jetty-adapter "1.3.1"]
-                 [hiccup "1.0.5"]
-                 [garden "1.2.1"]
-                 [xhh/clang "0.1.0-SNAPSHOT"]]
+                 ;; [hiccup "1.0.5"]
+                 ;; [garden "1.2.5"]
+                 ;; [xhh/clang "0.1.0-SNAPSHOT"]
+                 ]
   :min-lein-version "2.0.0" ; For Heroku.
-  :main delta-auto.server.server
-  :plugins [[environ "1.0.0"]
-            ;; [lein-cljsbuild "1.0.3"]
-            [lein-ring "0.8.11"]
-            ]
+  :main repondezplait.server
+  ;; :plugins [[environ "1.0.0"]
+  ;;           ;; [lein-cljsbuild "1.0.3"]
+  ;;           [lein-ring "0.8.11"]
+  ;;           ]
   ;; :hooks [leiningen.cljsbuild]
-  ;; :cljsbuild {:builds [{:source-paths ["src/delta_auto/app"]
+  ;; :cljsbuild {:builds [{:source-paths ["src/repondezplait/app"]
   ;;                       :compiler {:output-to "output/app.js"
   ;;                                  :optimizations :whitespace
   ;;                                  :pretty-print true}}]}
-  :ring {:handler delta-auto.server.server/application
+  :ring {:handler repondezplait.server/application
          :port 5000
          :auto-refresh? true}
   :profiles {:production {:env {:production true}}}
-  :env {:asdf 454545})
+
+
+  :env {:asdf 454545}
+
+
+  )
