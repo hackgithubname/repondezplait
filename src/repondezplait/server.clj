@@ -16,8 +16,9 @@
 
   (POST "/incoming" request
         (let [message (get-in request [:params :message])]
-          nil)
-        {:status 200 :headers {"Content-Type" "text/plain"}})
+          (println request)
+          (println message)
+          {:status 200 :headers {"Content-Type" "text/plain"}}))
 
   (route/resources "/")
   ;; (GET "*" [] views/index)
