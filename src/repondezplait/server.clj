@@ -15,7 +15,8 @@
   ;; (GET "/pages/home" [] views/home)
 
   (POST "/incoming" request
-        (let params )
+        (let [message (get-in request [:params :message])]
+          nil)
         {:status 200 :headers {"Content-Type" "text/plain"}})
 
   (route/resources "/")
