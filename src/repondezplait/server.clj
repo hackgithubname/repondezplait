@@ -23,7 +23,8 @@
         (let [content (get-in request [:params :message])
               session (Session/getDefaultInstance (Properties.))
               stream (ByteArrayInputStream. (.getBytes content))
-              message (MimeMessage. session stream)]
+              message (MimeMessage. session stream)
+              ]
           ;; (send-message)
           (println (.getRecipients message javax.mail.Message$RecipientType/TO))
           (println (.getRecipients message javax.mail.Message$RecipientType/CC))
