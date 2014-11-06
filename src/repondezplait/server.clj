@@ -15,7 +15,7 @@
   ;; (GET "/pages/home" [] views/home)
 
   (POST "/incoming" request
-        (println (:params request))
+        (let params )
         {:status 200 :headers {"Content-Type" "text/plain"}})
 
   (route/resources "/")
@@ -41,8 +41,8 @@
 ;; (println "asdfaf")
 
 
-;; (defn -main [& args]
-;;   (start))
+(defn -main [& args]
+  (start))
 
 
 
