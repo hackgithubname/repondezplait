@@ -1,6 +1,6 @@
 (ns repondezplait.server
-  (:require ;; [environ.core :refer [env]]
-            [compojure.core :refer [defroutes GET]]
+  (:require [environ.core :refer [env]]
+            [compojure.core :refer [defroutes GET POST]]
             [compojure.handler :as handler]
             [compojure.route :as route]
             [ring.adapter.jetty :as ring]
@@ -15,11 +15,11 @@
   ;; (GET "/pages/home" [] views/home)
 
   (POST "/incoming" request
-        (println request)
-        (str "")) ; Empty but successful response.
+        (println (:params request))
+        {:status 200 :headers {"Content-Type" "text/plain"}})
 
   (route/resources "/")
-  (GET "*" [] views/index)
+  ;; (GET "*" [] views/index)
   (route/not-found "Not Found!"))
 
 (def application (handler/site routes)) ; Standalone def for lein-ring.
@@ -40,8 +40,9 @@
 ;; (println (env :asdfasdfdsfs))
 ;; (println "asdfaf")
 
-(defn -main [& args]
-  (start))
+
+;; (defn -main [& args]
+;;   (start))
 
 
 
