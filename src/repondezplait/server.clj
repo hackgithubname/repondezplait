@@ -4,9 +4,14 @@
             [compojure.handler :as handler]
             [compojure.route :as route]
             [ring.adapter.jetty :as ring]
+            [postal.core :refer [send-message]]
             ;; [repondezplait.server.views :as views]
             ;; [repondezplait.server.style :refer [stylesheet]]
    )
+  (:import [java.util Properties]
+           [java.io InputStream ByteArrayInputStream]
+           [javax.mail Session]
+           [javax.mail.internet MimeMessage])
   (:gen-class))
 
 (defroutes routes
@@ -15,9 +20,17 @@
   ;; (GET "/pages/home" [] views/home)
 
   (POST "/incoming" request
-        (let [message (get-in request [:params :message])]
-          (println request)
-          (println message)
+        (let [content (get-in request [:params :message])
+              session (Session/getDefaultInstance (Properties.))
+              stream (ByteArrayInputStream. (.getBytes content))
+              message (MimeMessage. session stream)]
+          ;; (send-message)
+          (println (.getRecipients message javax.mail.Message$RecipientType/TO))
+          (println (.getRecipients message javax.mail.Message$RecipientType/CC))
+          (println (.getType (.getFrom message)))
+          (println (.toString (.getFrom message)))
+          (println (.getSubject message))
+          (println (.getContent message))
           {:status 200 :headers {"Content-Type" "text/plain"}}))
 
   (route/resources "/")
