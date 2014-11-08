@@ -27,11 +27,13 @@
               ]
           ;; (send-message)
           (println (.getRecipients message javax.mail.Message$RecipientType/TO))
-          (println (.getRecipients message javax.mail.Message$RecipientType/CC))
-          (println (.getType (.getFrom message)))
-          (println (.toString (.getFrom message)))
+          (doseq [from (.getFrom message)]
+            (println (.getType from)))
+          (doseq [from (.getFrom message)]
+            (println (.toString from)))
           (println (.getSubject message))
           (println (.getContent message))
+          (println (.toString (.getContent message)))
           {:status 200 :headers {"Content-Type" "text/plain"}}))
 
   (route/resources "/")
