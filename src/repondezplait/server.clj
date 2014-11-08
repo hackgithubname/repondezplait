@@ -20,7 +20,7 @@
 
   ;; (GET "/pages/home" [] views/home)
 
-  (GET "/thanks" [] "Thank you! Your response has been recorded. You have pleased Nora, high arbiter of technical recruiting; prepare to recieve her boon.")
+  (GET "/thanks" [] "Thank you! Your response has been recorded. You have pleased Nora, high archon of technical recruiting; prepare to recieve her boon.")
 
   (POST "/incoming" request
         (let [content (get-in request [:params :message])
