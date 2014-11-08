@@ -1,5 +1,6 @@
 (ns repondezplait.server
-  (:require [environ.core :refer [env]]
+  (:require [clojure.string :refer [join split-lines]]
+            [environ.core :refer [env]]
             [compojure.core :refer [defroutes GET POST]]
             [compojure.handler :as handler]
             [compojure.route :as route]
@@ -24,14 +25,20 @@
               session (Session/getDefaultInstance (Properties.))
               stream (ByteArrayInputStream. (.getBytes content))
               message (MimeMessage. session stream)
-              ]
-          ;; (send-message)
-          (doseq [to (.getRecipients message javax.mail.Message$RecipientType/TO)]
-            (println (.toString to)))
-          (doseq [from (.getFrom message)]
-            (println (.toString from)))
-          (println (.getSubject message))
-          (println (.. message getContent (getBodyPart 0) getContent))
+              from (first (.getFrom message)) ; Array of multiple froms apparently returned.
+              raw-body-lines (split-lines (.. message getContent (getBodyPart 0) getContent))
+              to (first raw-body-lines)
+              html (str (->> (next raw-body-lines) (join "\n") (trim))
+                        "<br /><br /><div>hi!</div>")]
+          (send-message {:from from ; Maybe someday we'll be able to set this and gmail won't override it.
+                         :Reply-To from
+                         :to to
+                         ;; :to (.getRecipients message javax.mail.Message$RecipientType/TO)
+                         ;; :cc (.getRecipients message javax.mail.Message$RecipientType/CC)
+                         ;; :bcc (.getRecipients message javax.mail.Message$RecipientType/BCC)
+                         :subject (.getSubject message)
+                         :body html
+                         :Content-Type: "text/html; charset=UTF-8"})
           {:status 200 :headers {"Content-Type" "text/plain"}}))
 
   (route/resources "/")
