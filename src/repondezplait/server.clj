@@ -32,7 +32,10 @@
               to (first raw-body-lines)
               html (str (->> (next raw-body-lines) (join "\n") (trim))
                         "<br /><br /><div>hi!</div>")]
-          (send-message {:from from ; Maybe someday we'll be able to set this and gmail won't override it.
+          (send-message {:host "smtp.gmail.com"
+                         :user "repondezplait"
+                         :pass "repondezplait111"}
+                        {:from from ; Maybe someday we'll be able to set this and gmail won't override it.
                          :Reply-To from
                          :to to
                          ;; :to (.getRecipients message javax.mail.Message$RecipientType/TO)
