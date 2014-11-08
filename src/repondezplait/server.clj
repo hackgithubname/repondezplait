@@ -31,7 +31,7 @@
           (doseq [from (.getFrom message)]
             (println (.toString from)))
           (println (.getSubject message))
-          (println (.. message getContent (getBodyPart 0) getContent)
+          (println (.. message getContent (getBodyPart 0) getContent))
           {:status 200 :headers {"Content-Type" "text/plain"}}))
 
   (route/resources "/")
