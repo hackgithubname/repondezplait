@@ -34,9 +34,10 @@
                         "<br /><br /><div>hi!</div>")]
           (send-message {:host "smtp.gmail.com"
                          :user "repondezplait"
-                         :pass "repondezplait111"}
+                         :pass "repondezplait111"
+                         :ssl true}
                         {:from from ; Maybe someday we'll be able to set this and gmail won't override it.
-                         :Reply-To (str from)
+                         :Reply-To (str from) ; Headers not built in to postal must be explicitly converted to strings.
                          :to to
                          ;; :to (.getRecipients message javax.mail.Message$RecipientType/TO)
                          :subject (.getSubject message)
