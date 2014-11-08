@@ -26,14 +26,12 @@
               message (MimeMessage. session stream)
               ]
           ;; (send-message)
-          (println (.getRecipients message javax.mail.Message$RecipientType/TO))
-          (doseq [from (.getFrom message)]
-            (println (.getType from)))
+          (doseq [to (.getRecipients message javax.mail.Message$RecipientType/TO)]
+            (println (.toString to)))
           (doseq [from (.getFrom message)]
             (println (.toString from)))
           (println (.getSubject message))
-          (println (.getContent message))
-          (println (.toString (.getContent message)))
+          (println (.. message getContent (getBodyPart 0) getContent)
           {:status 200 :headers {"Content-Type" "text/plain"}}))
 
   (route/resources "/")
