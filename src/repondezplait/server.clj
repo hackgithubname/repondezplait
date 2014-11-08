@@ -1,5 +1,5 @@
 (ns repondezplait.server
-  (:require [clojure.string :refer [join split-lines]]
+  (:require [clojure.string :refer [join trim split-lines]]
             [environ.core :refer [env]]
             [compojure.core :refer [defroutes GET POST]]
             [compojure.handler :as handler]
@@ -20,6 +20,8 @@
 
   ;; (GET "/pages/home" [] views/home)
 
+  (GET "/thanks" [] "Thank you! Your response has been recorded. You have pleased Nora, high arbiter of technical recruiting; prepare to recieve her boon.")
+
   (POST "/incoming" request
         (let [content (get-in request [:params :message])
               session (Session/getDefaultInstance (Properties.))
@@ -34,11 +36,9 @@
                          :Reply-To from
                          :to to
                          ;; :to (.getRecipients message javax.mail.Message$RecipientType/TO)
-                         ;; :cc (.getRecipients message javax.mail.Message$RecipientType/CC)
-                         ;; :bcc (.getRecipients message javax.mail.Message$RecipientType/BCC)
                          :subject (.getSubject message)
                          :body html
-                         :Content-Type: "text/html; charset=UTF-8"})
+                         :Content-Type "text/html; charset=UTF-8"})
           {:status 200 :headers {"Content-Type" "text/plain"}}))
 
   (route/resources "/")
