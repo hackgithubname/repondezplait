@@ -36,7 +36,7 @@
                          :user "repondezplait"
                          :pass "repondezplait111"}
                         {:from from ; Maybe someday we'll be able to set this and gmail won't override it.
-                         :Reply-To from
+                         :Reply-To (str from)
                          :to to
                          ;; :to (.getRecipients message javax.mail.Message$RecipientType/TO)
                          :subject (.getSubject message)
