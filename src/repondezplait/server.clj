@@ -34,13 +34,16 @@
                          :pass "repondezplait111"
                          :ssl true}
                         {:from from ; It doesn't matter what this is set to, Gmail will override it.
-                         :Reply-To (str from) ; Headers not built into postal must be explicitly converted to strings.
+                         :reply-to from
                          :to (first raw-body-lines)
                          ;; :to (.getRecipients message javax.mail.Message$RecipientType/TO)
                          :subject (.getSubject message)
-                         :body (str (->> (next raw-body-lines) (join "\n") (trim))
-                                    "<br /><br /><div>hi!</div>")
-                         :Content-Type "text/html; charset=UTF-8"})
+                         :body [:alternative
+                                {:type "text/plain; charset=utf-8"
+                                 :content (->> (next raw-body-lines) (join "\n") (trim))}
+                                {:type "text/html; charset=utf-8"
+                                 :content (str (->> (next raw-body-lines) (join "<br />") (trim))
+                                               "<br /><br /><div>hi!</div>")}]})
           {:status 200 :headers {"Content-Type" "text/plain"}}))
 
   ;; (route/resources "/")
