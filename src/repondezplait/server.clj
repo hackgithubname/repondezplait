@@ -1,6 +1,6 @@
 (ns repondezplait.server
-  (:require [clojure.string :refer [join trim split-lines]]
-            [environ.core :refer [env]]
+  (:require [environ.core :refer [env]]
+            [clojure.string :refer [join trim split-lines]]
             [compojure.core :refer [defroutes GET POST]]
             [compojure.handler :as handler]
             [compojure.route :as route]
@@ -20,32 +20,30 @@
 
   ;; (GET "/pages/home" [] views/home)
 
-  (GET "/thanks" [] "Thank you! Your response has been recorded. You have pleased Nora, high archon of technical recruiting; prepare to recieve her boon.")
+  (GET "/respond" [] "Thank you! Your response has been recorded. You have pleased Nora, high archon of technical recruiting; prepare to recieve her boon.")
 
   (POST "/incoming" request
-        (let [content (get-in request [:params :message])
-              session (Session/getDefaultInstance (Properties.))
-              stream (ByteArrayInputStream. (.getBytes content))
-              message (MimeMessage. session stream)
-              from (first (.getFrom message)) ; Array of multiple froms apparently returned.
-              raw-body-lines (split-lines (.. message getContent (getBodyPart 0) getContent))
-              to (first raw-body-lines)
-              html (str (->> (next raw-body-lines) (join "\n") (trim))
-                        "<br /><br /><div>hi!</div>")]
+        (let [message (let [content (get-in request [:params :message])
+                            session (Session/getDefaultInstance (Properties.))
+                            stream (ByteArrayInputStream. (.getBytes content))]
+                        (MimeMessage. session stream))
+              from (first (.getFrom message)) ; Apparently it's an array of multiple froms.
+              raw-body-lines (split-lines (.. message getContent (getBodyPart 0) getContent))]
           (send-message {:host "smtp.gmail.com"
                          :user "repondezplait"
                          :pass "repondezplait111"
                          :ssl true}
-                        {:from from ; Maybe someday we'll be able to set this and gmail won't override it.
-                         :Reply-To (str from) ; Headers not built in to postal must be explicitly converted to strings.
-                         :to to
+                        {:from from ; It doesn't matter what this is set to, Gmail will override it.
+                         :Reply-To (str from) ; Headers not built into postal must be explicitly converted to strings.
+                         :to (first raw-body-lines)
                          ;; :to (.getRecipients message javax.mail.Message$RecipientType/TO)
                          :subject (.getSubject message)
-                         :body html
+                         :body (str (->> (next raw-body-lines) (join "\n") (trim))
+                                    "<br /><br /><div>hi!</div>")
                          :Content-Type "text/html; charset=UTF-8"})
           {:status 200 :headers {"Content-Type" "text/plain"}}))
 
-  (route/resources "/")
+  ;; (route/resources "/")
   ;; (GET "*" [] views/index)
   (route/not-found "Not Found!"))
 
