@@ -15,19 +15,6 @@
            [javax.mail.internet MimeMessage])
   (:gen-class))
 
-
-(send-message {:host "smtp.gmail.com"
-               :user "repondezplait"
-               :pass "repondezplait111"
-               :ssl true}
-              {:from "bob@bob.bob"
-               :Reply-To (str "bob@steve.bob") ; Headers not built into postal must be explicitly converted to strings.
-               :to "Chris Baranowski <pharcosyle@gmail.com>s"
-               :subject "subject"
-               :body "some stuff 222222"
-               :Content-Type "text/html; charset=UTF-8"})
-
-
 (defroutes routes
   ;; (GET "/style.css" [] {:headers {"Content-Type" "text/css"} :body stylesheet})
 
