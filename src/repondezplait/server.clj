@@ -1,6 +1,6 @@
 (ns repondezplait.server
   (:require [environ.core :refer [env]]
-            [clojure.string :refer [join trim split-lines]]
+            [clojure.string :refer [join trim split-lines replace]]
             [compojure.core :refer [defroutes GET POST]]
             [compojure.handler :as handler]
             [compojure.route :as route]
@@ -8,7 +8,7 @@
             [postal.core :refer [send-message]]
             [monger.core :as mg]
             [monger.collection :as mc]
-            ;; [monger.result :refer [ok?]]
+            [monger.result :refer [ok?]]
             ;; [repondezplait.server.views :as views]
             ;; [repondezplait.server.style :refer [stylesheet]]
    )
@@ -21,11 +21,10 @@
 
 
 (let [{:keys [db]} (mg/connect-via-uri (System/genenv "MONGOLAB_URI"))]
-
   (defroutes routes
     ;; (GET "/style.css" [] {:headers {"Content-Type" "text/css"} :body stylesheet})
 
-    (GET "/respond" [] "Thank you! Your response has been recorded, and you may change it at any time. You have pleased Nora, high archon of technical recruiting; prepare to recieve her boon.")
+    (GET "/respond" [] "Thank you! Your response has been recorded and you may change it at any time. You have pleased Nora, high archon of technical recruiting; prepare to recieve her boon.")
 
     (let [template (slurp "resources/email.html")]
       (POST "/incoming" request
@@ -34,10 +33,10 @@
                                 stream (ByteArrayInputStream. (.getBytes content))]
                             (MimeMessage. session stream))
                   sender (first (.getFrom message)) ; Apparently it's an array of multiple froms.
-                  raw-body-lines (split-lines (.. message getContent (getBodyPart 0) getContent))]
+                  raw-body-lines (split-lines (.. message getContent (getBodyPart 0) getContent))
                   recipient (first raw-body-lines)
-                  new-body (fn [sep] (->> (next raw-body-lines) (join sep) (trim)))
-                  document (mc/insert db "emails" {:_id (ObjectId.) :sent (Date.) :sender sender :recipient recipient}))
+                  new-body #(->> (next raw-body-lines) (join %) (trim))
+                  oid (ObjectId.)]
               (let [{:keys [error]} (send-message {:host "smtp.gmail.com"
                                                    :user "repondezplait"
                                                    :pass "repondezplait111"
@@ -51,15 +50,14 @@
                                                           {:type "text/plain; charset=utf-8"
                                                            :content (new-body "\n")}
                                                           {:type "text/html; charset=utf-8"
-                                                           :content (let [base-url (str "http://repondezplait.herokuapp.com/respond?id=" (:_id document) "&answer=")]
-                                                                      (str (-> template
-                                                                               (replace "{{body}}" (new-body "<br />"))
-                                                                               (replace "{{yes-url}}" (str base-url "yes"))
-                                                                               (replace "{{no-url}}" (str base-url "no")))
-                                                                           "<br /><br /><div>hi!</div>"))}]})]
+                                                           :content (let [base-url (str "http://repondezplait.herokuapp.com/respond?id=" oid "&answer=")]
+                                                                      (-> template (replace "{{body}}" (new-body "<br />"))
+                                                                                   (replace "{{yes-url}}" (str base-url "yes"))
+                                                                                   (replace "{{no-url}}" (str base-url "no"))))}]})]
                 (when (not= :SUCCESS error))
-                  (throw (Exception. error)))
-            {:status 200 :headers {"Content-Type" "text/plain"}})) ; Tell postal everything worked.
+                  (throw (Exception. error))))
+            (assert (ok? (mc/insert db "emails" {:_id oid :sent (Date.) :sender sender :recipient recipient})))
+            {:status 200 :headers {"Content-Type" "text/plain"}})) ; Tell mail2webhook everything worked.
 
     ;; (route/resources "/")
     ;; (GET "*" [] views/index)
