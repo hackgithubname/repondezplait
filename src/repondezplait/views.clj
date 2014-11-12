@@ -26,6 +26,9 @@
            ;; [:script {:src "/bower_components/flatui/js/jquery.placeholder.js"}]
           ]))
 
+(def respond "asdf")
+(def responses "asdf")
+
 ;; (def respond
 ;;   (html [:div.home
 ;;            "Thank you! Your response has been recorded and you may change it at any time."

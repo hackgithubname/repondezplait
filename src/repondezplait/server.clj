@@ -10,7 +10,7 @@
             [monger.collection :as mc]
             [monger.result :refer [ok?]]
             [repondezplait.views :as views]
-            [repondezplait.server.style :refer [stylesheet]]
+            [repondezplait.style :refer [stylesheet]]
    )
   (:import [java.util Properties Date]
            [java.io InputStream ByteArrayInputStream]
@@ -63,7 +63,7 @@
                                                                     "no" false)})
          views/respond)
 
-    (GET "/responses" [] view/responses)
+    (GET "/responses" [] views/responses)
 
     (GET "/style.css" [] {:headers {"Content-Type" "text/css"} :body stylesheet})
 
