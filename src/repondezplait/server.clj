@@ -75,7 +75,7 @@
 (def application (handler/site routes)) ; Standalone def for lein-ring.
 
 (defn start []
-  (ring/run-jetty application {:port (Integer. (env :port 5000))
+  (ring/run-jetty application {:port (Integer. (or (System/getenv "PORT") 5000))
                                :join? false}))
 
 
