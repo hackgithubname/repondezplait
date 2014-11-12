@@ -20,9 +20,9 @@
   ;;                       :compiler {:output-to "output/app.js"
   ;;                                  :optimizations :whitespace
   ;;                                  :pretty-print true}}]}
-  :ring {:handler repondezplait.server/application
-         :port 5000
-         :auto-refresh? true}
+  ;; :ring {:handler repondezplait.server/application
+  ;;        :port 5000
+  ;;        :auto-refresh? true}
   :profiles {:production {:env {:production true}}}
 
 
