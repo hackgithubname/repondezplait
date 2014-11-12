@@ -1,5 +1,5 @@
 (ns repondezplait.server
-  (:require [environ.core :refer [env]]
+  (:require ; [environ.core :refer [env]]
             [clojure.string :refer [join trim split-lines replace]]
             [compojure.core :refer [defroutes GET POST]]
             [compojure.handler :as handler]
@@ -58,7 +58,8 @@
             {:status 200 :headers {"Content-Type" "text/plain"}})) ; Tell mail2webhook everything worked.
 
     (GET "/respond/:id/:answer" [id answer]
-         (mc/update-by-id db "emails" (ObjectId. id) {:answer (case answer
+         (mc/update-by-id db "emails" (ObjectId. id) {:answered_at (Date.)
+                                                      :answer (case answer
                                                                     "yes" true
                                                                     "no" false)})
          views/respond)

@@ -1,7 +1,7 @@
 (defproject repondezplait "0.1.0"
   :dependencies [[org.clojure/clojure "1.6.0"]
                  ;; [org.clojure/clojurescript "0.0-2322"]
-                 [environ "1.0.0"]
+                 ;; [environ "1.0.0"]
                  [compojure "1.2.1"]
                  [ring/ring-jetty-adapter "1.3.1"]
                  [com.draines/postal "1.11.2"]
