@@ -9,8 +9,8 @@
             [monger.core :as mg]
             [monger.collection :as mc]
             [monger.result :refer [ok?]]
-            ;; [repondezplait.server.views :as views]
-            ;; [repondezplait.server.style :refer [stylesheet]]
+            [repondezplait.views :as views]
+            [repondezplait.server.style :refer [stylesheet]]
    )
   (:import [java.util Properties Date]
            [java.io InputStream ByteArrayInputStream]
@@ -20,12 +20,8 @@
   (:gen-class))
 
 
-(let [{:keys [db]} (mg/connect-via-uri (System/genenv "MONGOLAB_URI"))]
+(let [{:keys [db]} (mg/connect-via-uri (System/getenv "MONGOLAB_URI"))]
   (defroutes routes
-    ;; (GET "/style.css" [] {:headers {"Content-Type" "text/css"} :body stylesheet})
-
-    (GET "/respond" [] "Thank you! Your response has been recorded and you may change it at any time. You have pleased Nora, high archon of technical recruiting; prepare to recieve her boon.")
-
     (let [template (slurp "resources/email.html")]
       (POST "/incoming" request
             (let [message (let [content (get-in request [:params :message])
@@ -36,28 +32,40 @@
                   raw-body-lines (split-lines (.. message getContent (getBodyPart 0) getContent))
                   recipient (first raw-body-lines)
                   new-body #(->> (next raw-body-lines) (join %) (trim))
-                  oid (ObjectId.)]
+                  new-body-text (new-body "\n")
+                  oid (ObjectId.)
+                  new-message {:from sender ; It doesn't matter what this is set to, Gmail will override it.
+                               :reply-to sender
+                               :to recipient
+                               ;; :to (.getRecipients message javax.mail.Message$RecipientType/TO)
+                               :subject (.getSubject message)
+                               :body [:alternative
+                                      {:type "text/plain; charset=utf-8"
+                                       :content new-body-text}
+                                      {:type "text/html; charset=utf-8"
+                                       :content (let [base-url (str "http://repondezplait.herokuapp.com/respond/" oid "/")]
+                                                  (-> template (replace "{{body}}" (new-body "<br />"))
+                                                               (replace "{{yes-url}}" (str base-url "yes"))
+                                                               (replace "{{no-url}}" (str base-url "no"))))}]}]
               (let [{:keys [error]} (send-message {:host "smtp.gmail.com"
                                                    :user "repondezplait"
                                                    :pass "repondezplait111"
                                                    :ssl true}
-                                                  {:from sender ; It doesn't matter what this is set to, Gmail will override it.
-                                                   :reply-to sender
-                                                   :to recipient
-                                                   ;; :to (.getRecipients message javax.mail.Message$RecipientType/TO)
-                                                   :subject (.getSubject message)
-                                                   :body [:alternative
-                                                          {:type "text/plain; charset=utf-8"
-                                                           :content (new-body "\n")}
-                                                          {:type "text/html; charset=utf-8"
-                                                           :content (let [base-url (str "http://repondezplait.herokuapp.com/respond?id=" oid "&answer=")]
-                                                                      (-> template (replace "{{body}}" (new-body "<br />"))
-                                                                                   (replace "{{yes-url}}" (str base-url "yes"))
-                                                                                   (replace "{{no-url}}" (str base-url "no"))))}]})]
+                                                  new-message)]
                 (when (not= :SUCCESS error)
                   (throw (Exception. error))))
-              (assert (ok? (mc/insert db "emails" {:_id oid :sent (Date.) :sender sender :recipient recipient}))))
+              (assert (ok? (mc/insert db "emails" {:_id oid :sent (Date.) :sender sender :recipient recipient :text new-body-text}))))
             {:status 200 :headers {"Content-Type" "text/plain"}})) ; Tell mail2webhook everything worked.
+
+    (GET "/respond/:id/:answer" [id answer]
+         (mc/update-by-id db "emails" (ObjectId. id) {:answer (case answer
+                                                                    "yes" true
+                                                                    "no" false)})
+         views/respond)
+
+    (GET "/responses" [] view/responses)
+
+    (GET "/style.css" [] {:headers {"Content-Type" "text/css"} :body stylesheet})
 
     ;; (route/resources "/")
     ;; (GET "*" [] views/index)
