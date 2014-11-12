@@ -7,7 +7,7 @@
                  [com.draines/postal "1.11.2"]
                  [com.novemberain/monger "2.0.0"]
                  [hiccup "1.0.5"]
-                 ;; [garden "1.2.5"]
+                 [garden "1.2.5"]
                  ;; [xhh/clang "0.1.0-SNAPSHOT"]
                  ]
   :min-lein-version "2.0.0" ; For Heroku.

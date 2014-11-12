@@ -67,7 +67,6 @@
     (GET "/responses" [] views/responses)
 
     (GET "/style.css" [] {:headers {"Content-Type" "text/css"} :body stylesheet})
-
     ;; (route/resources "/")
     ;; (GET "*" [] views/index)
     (route/not-found "Not Found!")))

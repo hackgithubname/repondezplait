@@ -1,81 +1,60 @@
 (ns repondezplait.style
-  ;; (:refer-clojure :exclude [+ - * /])
-  ;; (:require [garden.core :refer [css]]
-  ;;           [garden.units :refer [px]]
-  ;;           [garden.arithmetic :refer [+ - * /]]
-  ;;           [garden.color :refer [lighten]])
-  )
+  (:refer-clojure :exclude [+ - * /])
+  (:require [garden.core :refer [css]]
+            [garden.units :refer [px]]
+            [garden.arithmetic :refer [+ - * /]]
+            ;; [garden.color :refer [lighten]]
+  ))
 
 (def stylesheet
-  "asdf")
-  ;; (let [ ; How does this work? Don't these need to be in their own vectors?
-  ;;       clearfix [:&:before
-  ;;                 :&:after {:content "\" \""
-  ;;                           :display "table"}
-  ;;                 :&:after {:clear "both"}]
-  ;;       center {:margin-left "auto"
-  ;;               :margin-right "auto"}
+  (let [white "white"
+
+        wet-asphalt "#34495E"
+        midnight-blue "#2C3E50"
+
+        clouds "#ECF0F1"
+        silver "#BDC3C7"
+
+        concrete "#95A5A6"
+        asbestos "#7F8C8D"
+
+        turquoise "#1ABC9C"
+        green-sea "#16A085"
+
+        emerald "#2ECC71"
+        nephritis "#27AE60"
+
+        peter-river "#3498DB"
+        belize-hole "#2980B9"
+
+        amethyst "#9B59B6"
+        wisteria "#8E44AD"
+
+        sunflower "#F1C40F"
+        orange "#F39C12"
+
+        carrot "#E67E22"
+        pumpkin "#D35400"
+
+        alizarin "#E74C3C"
+        pomegranite "#C0392B"
+
+        text-font "'Lato', sans-serif"]
+    (css
+      [:body {:font-family text-font}]
+      [:footer {:color "rgb(119, 119, 119)"
+                :padding-top (px 9)
+                :border-top "1px solid #e5e5e5"}]
+
+      [:.respond
+        [:.jumbotron {:margin-top (px 30)
+                      :margin-bottom (px 200)}
+          [:h1 {:text-align "left"
+                :color emerald}]
+          [:.lead {:text-align "right"
+                   :padding-left "40%"}]]])))
 
 
-  ;;       white "white"
-
-  ;;       wet-asphalt "#34495E"
-  ;;       midnight-blue "#2C3E50"
-
-  ;;       clouds "#ECF0F1"
-  ;;       silver "#BDC3C7"
-
-  ;;       concrete "#95A5A6"
-  ;;       asbestos "#7F8C8D"
-
-  ;;       turquoise "#1ABC9C"
-  ;;       green-sea "#16A085"
-
-  ;;       emerald "#2ECC71"
-  ;;       nephritis "#27AE60"
-
-  ;;       peter-river "#3498DB"
-  ;;       belize-hole "#2980B9"
-
-  ;;       amethyst "#9B59B6"
-  ;;       wisteria "#8E44AD"
-
-  ;;       sunflower "#F1C40F"
-  ;;       orange "#F39C12"
-
-  ;;       carrot "#E67E22"
-  ;;       pumpkin "#D35400"
-
-  ;;       alizarin "#E74C3C"
-  ;;       pomegranite "#C0392B"
-
-
-  ;;       ;; display-font "'Helvetica Neue', Helvetica, Arial, sans-serif"
-  ;;       text-font "'Lato', sans-serif"
-  ;;       font-size (px 16)
-  ;;       ;; line-height 1.25
-  ;;       border-radius (px 4)
-
-  ;;       action-color turquoise
-  ;;       action-hover-color (lighten action-color 10)
-  ;;       action-active-color green-sea
-  ;;       action-transition ".25s linear"
-
-  ;;       gap (px 32)
-
-  ;;       page-width (px 960)
-
-  ;;       container (merge center {:width page-width})
-  ;;       row clearfix
-  ;;       column {:float "left"
-  ;;               ;; :padding "0 15px"
-  ;;               }
-
-  ;;       lead {:font-size (px 30)
-  ;;             :font-weight 300}
-
-  ;;       white-links [:a {:color white}]
-  ;;       gap-bottom {:margin-bottom gap}]
   ;;   (css
   ;;    ;; Normalize.css override
   ;;    [:h1 {:margin 0}]

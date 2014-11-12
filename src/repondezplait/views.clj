@@ -1,33 +1,42 @@
 (ns repondezplait.views
-  (:require [hiccup.core :refer [html]]
+  (:require ; [hiccup.core :refer [html]]
             [hiccup.page :refer [html5]]))
 
 
-(def index
+(defn template [content]
   (html5 [:head
            [:meta {:charset "utf-8"}]
            [:meta {:http-equiv "X-UA-Compatible" :content "IE=edge"}]
-           [:title "Repondezplait"]
+           [:title "Repondezplait!"]
            [:meta {:name "description" :content ""}]
            [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]
            [:link {:rel "stylesheet" :href "http://fonts.googleapis.com/css?family=Lato:300,400,700"}]
-           [:link {:rel "stylesheet" :href "//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css"}]
+           ;; [:link {:rel "stylesheet" :href "//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css"}]
+           [:link {:rel "stylesheet" :href "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"}]
+           [:link {:rel "stylesheet" :href "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css"}]
            [:link {:rel "stylesheet" :href "/style.css"}]]
          [:body
-           ;; [:div.site-header
-           ;;   [:header
-           ;;     [:a {:href "/"}
-           ;;       [:img {:src "/images/logo.png"}]]
-           ;;     [:a {:href "/"} "Home"]
-           ;;     [:a {:href "/inventory"} "Inventory"]
-           ;;     [:a {:href "/contact"} "Location / Contact"]]]
-           ;; [:div.contents "shiiiii"]
-           ;; [:footer " more shiiii "]
-           ;; [:script {:src "/bower_components/flatui/js/jquery.placeholder.js"}]
-          ]))
+           [:div.container
+             content
+             ;; [:div.site-header
+             ;;   [:header
+             ;;     [:a {:href "/"}
+             ;;       [:img {:src "/images/logo.png"}]]
+             ;;     [:a {:href "/"} "Home"]
+             ;;     [:a {:href "/inventory"} "Inventory"]
+             ;;     [:a {:href "/contact"} "Location / Contact"]]]
+             ;; [:div.contents "shiiiii"]
+             [:footer.footer
+               [:p "© Nora Hamada 2014"]]]
+           [:script {:src "https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"}]
+           [:script {:src "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"}]]))
 
-(def respond "asdf")
-(def responses "asdf")
+(def respond
+  (template [:div.respond
+              [:div.jumbotron
+                [:h1 "Thank you!"]
+                [:p.lead "Your response has been recorded and you may change it at any time. You have pleased Nora, high archon of technical recruiting; prepare to recieve her boon."]]]))
+(def responses (template "asdf"))
 
 ;; (def respond
 ;;   (html [:div.home
