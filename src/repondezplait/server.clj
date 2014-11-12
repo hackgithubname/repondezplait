@@ -54,9 +54,9 @@
                                                                       (-> template (replace "{{body}}" (new-body "<br />"))
                                                                                    (replace "{{yes-url}}" (str base-url "yes"))
                                                                                    (replace "{{no-url}}" (str base-url "no"))))}]})]
-                (when (not= :SUCCESS error))
+                (when (not= :SUCCESS error)
                   (throw (Exception. error))))
-            (assert (ok? (mc/insert db "emails" {:_id oid :sent (Date.) :sender sender :recipient recipient})))
+              (assert (ok? (mc/insert db "emails" {:_id oid :sent (Date.) :sender sender :recipient recipient}))))
             {:status 200 :headers {"Content-Type" "text/plain"}})) ; Tell mail2webhook everything worked.
 
     ;; (route/resources "/")
