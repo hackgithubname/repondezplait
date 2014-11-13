@@ -60,10 +60,10 @@
             {:status 200 :headers {"Content-Type" "text/plain"}})) ; Tell mail2webhook everything worked.
 
     (GET "/respond/:id/:answer" [id answer]
-         (mc/update-by-id db "emails" (ObjectId. id) {:answered_at (Date.)
-                                                      :answer (case answer
-                                                                    "yes" true
-                                                                    "no" false)})
+         (mc/update-by-id db "emails" (ObjectId. id) {:$set {:answered_at (Date.)
+                                                             :answer (case answer
+                                                                       "yes" true
+                                                                       "no" false)}})
          views/respond)
 
     (GET "/responses" []
