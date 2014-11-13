@@ -175,23 +175,27 @@
 </head>
 <body>
 <!-- Wrapper/Container Table: Use a wrapper table to control the width and the background color consistently of your email. Use this approach instead of setting attributes on the body tag. -->
-<table cellpadding="0" cellspacing="0" border="0" id="backgroundTable">
+<!-- <table cellpadding="0" cellspacing="0" border="0" id="backgroundTable">
 	<tr>
 		<td valign="top">
+ -->
 
 
-		{{body}}
+{{body}}
+
+<br />
+<br />
+
+<div class="box">
+	What say you?
+	<a href="{{yes-url}}" class="yes">Yes</a>
+	<a href="{{no-url}}" class="no">No</a>
+</div>
 
 
-		<div class="box">
-			What say you?
-			<a href="{{yes-url}}" class="yes">Yes</a>
-			<a href="{{no-url}}" class="no">No</a>
-		</div>
-
-		</td>
+<!-- 		</td>
 	</tr>
-</table>
+</table>   -->
 <!-- End of wrapper table -->
 </body>
 </html>
