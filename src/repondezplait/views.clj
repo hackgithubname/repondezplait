@@ -1,6 +1,7 @@
 (ns repondezplait.views
   (:require ; [hiccup.core :refer [html]]
-            [hiccup.page :refer [html5]]))
+            [hiccup.page :refer [html5]]
+            [hiccup.util :refer [escape-html]]))
 
 
 (defn template [& content]
@@ -50,27 +51,29 @@
         [:th "Recipient"]
         [:th "Subject"]
         [:th "Text Preview"]
-        [:th.spacer]
+        ;; [:th.spacer]
+        [:th "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"]
         [:th "Answered At"]
         [:th "Answer"]]]
     [:tbody
       (for [entry entries]
-        [(keyword (str "th" (case (:answer entry)
+        [(keyword (str "tr" (case (:answer entry)
                               true ".success"
                               false ".danger"
                               "")))
-          [:th (:sent entry)]
-          [:th (:sender entry)]
-          [:th (:recipient entry)]
-          [:th (:subject entry)]
-          [:th (let [trunc-length 80
-                     text (:text entry)]
+          [:td (:sent entry)]
+          [:td (escape-html (:sender entry))]
+          [:td (escape-html (:recipient entry))]
+          [:td (:subject entry)]
+          [:td (let [text (:text entry)
+                     trunc-length (min 80 (count text))]
                  (str (subs text 0 trunc-length)
                       (when (> trunc-length (count text))
                         "...")))]
-          [:th.spacer]
-          [:th (:answered_at entry)]
-          [:th (case (:answer entry)
+          ;; [:td.spacer]
+          [:td]
+          [:td (:answered_at entry)]
+          [:td (case (:answer entry)
                  true "Yes"
                  false "No"
                  "")]])]]))
