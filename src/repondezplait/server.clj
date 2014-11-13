@@ -46,10 +46,10 @@
                                       {:type "text/plain; charset=utf-8"
                                        :content new-body-text}
                                       {:type "text/html; charset=utf-8"
-                                       :content (let [base-url (str "http://repondezplait.herokuapp.com/respond/" oid "/")]
+                                       :content (let [url-base (str "http://repondezplait.herokuapp.com/respond/" oid "/")]
                                                   (-> template (replace "{{body}}" (new-body "<br>"))
-                                                               (replace "{{yes-url}}" (str base-url "yes"))
-                                                               (replace "{{no-url}}" (str base-url "no"))))}]}]
+                                                               (replace "{{yes-url}}" (str url-base "yes"))
+                                                               (replace "{{no-url}}" (str url-base "no"))))}]}]
               (let [{:keys [error]} (send-message {:host "smtp.sendgrid.net"
                                                    :user "app31322565@heroku.com"
                                                    :pass "s2scv5j7"}
