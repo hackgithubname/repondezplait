@@ -38,7 +38,7 @@
                   new-body-text (new-body "\n")
                   oid (ObjectId.)
                   new-message {:from sender
-                               :reply-to sender
+                               ;; :reply-to sender
                                :to recipient
                                ;; :to (.getRecipients message javax.mail.Message$RecipientType/TO)
                                :subject subject
