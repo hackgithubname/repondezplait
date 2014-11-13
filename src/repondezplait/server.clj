@@ -57,7 +57,7 @@
                 (when (not= :SUCCESS error)
                   (throw (Exception. error))))
               (assert (ok? (mc/insert db "emails" {:_id oid :sent (Date.) :sender sender :recipient recipient :subject subject :text new-body-text}))))
-            {:status 200 :headers {"Content-Type" "text/plain"}})) ; Tell mail2webhook everything worked.
+            {:status 200 :headers {"Content-Type" "text/plain"}})) ; Tell mail2webhook everything worked, otherwise it'll bounce the original email.
 
     (GET "/respond/:id/:answer" [id answer]
          (mc/update-by-id db "emails" (ObjectId. id) {:$set {:answered_at (Date.)
