@@ -3,7 +3,7 @@
             [hiccup.page :refer [html5]]))
 
 
-(defn template [content]
+(defn template [& content]
   (html5 [:head
            [:meta {:charset "utf-8"}]
            [:meta {:http-equiv "X-UA-Compatible" :content "IE=edge"}]
