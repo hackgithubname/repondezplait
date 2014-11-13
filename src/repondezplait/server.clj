@@ -47,7 +47,7 @@
                                        :content new-body-text}
                                       {:type "text/html; charset=utf-8"
                                        :content (let [base-url (str "http://repondezplait.herokuapp.com/respond/" oid "/")]
-                                                  (-> template (replace "{{body}}" (new-body "<br />"))
+                                                  (-> template (replace "{{body}}" (new-body "<br>"))
                                                                (replace "{{yes-url}}" (str base-url "yes"))
                                                                (replace "{{no-url}}" (str base-url "no"))))}]}]
               (let [{:keys [error]} (send-message {:host "smtp.sendgrid.net"
