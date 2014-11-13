@@ -30,9 +30,10 @@
                                 session (Session/getDefaultInstance (Properties.))
                                 stream (ByteArrayInputStream. (.getBytes content))]
                             (MimeMessage. session stream))
-                  sender (first (.getFrom message)) ; Apparently it's an array of multiple froms.
+                  sender (str (first (.getFrom message))) ; Apparently it's an array of multiple froms.
+                  subject (str (.getSubject message))
                   raw-body-lines (split-lines (.. message getContent (getBodyPart 0) getContent))
-                  recipient (first raw-body-lines)
+                  recipient (-> (first raw-body-lines) (trim))
                   new-body #(->> (next raw-body-lines) (join %) (trim))
                   new-body-text (new-body "\n")
                   oid (ObjectId.)
@@ -40,7 +41,7 @@
                                :reply-to sender
                                :to recipient
                                ;; :to (.getRecipients message javax.mail.Message$RecipientType/TO)
-                               :subject (.getSubject message)
+                               :subject subject
                                :body [:alternative
                                       {:type "text/plain; charset=utf-8"
                                        :content new-body-text}
@@ -56,7 +57,7 @@
                                                   new-message)]
                 (when (not= :SUCCESS error)
                   (throw (Exception. error))))
-              (assert (ok? (mc/insert db "emails" {:_id oid :sent (Date.) :sender sender :recipient recipient :text new-body-text}))))
+              (assert (ok? (mc/insert db "emails" {:_id oid :sent (Date.) :sender sender :recipient recipient :subject subject :text new-body-text}))))
             {:status 200 :headers {"Content-Type" "text/plain"}})) ; Tell mail2webhook everything worked.
 
     (GET "/respond/:id/:answer" [id answer]

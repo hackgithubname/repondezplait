@@ -48,6 +48,7 @@
         [:th "Sent At"]
         [:th "Sender"]
         [:th "Recipient"]
+        [:th "Subject"]
         [:th "Text Preview"]
         [:th.spacer]
         [:th "Answered At"]
@@ -61,6 +62,7 @@
           [:th (:sent entry)]
           [:th (:sender entry)]
           [:th (:recipient entry)]
+          [:th (:subject entry)]
           [:th (let [trunc-length 80
                      text (:text entry)]
                  (str (subs text 0 trunc-length)
