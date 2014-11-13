@@ -37,7 +37,7 @@
                   new-body #(->> (next raw-body-lines) (join %) (trim))
                   new-body-text (new-body "\n")
                   oid (ObjectId.)
-                  new-message {:from "repondezplait@gmail.com"
+                  new-message {:from sender ; It doesn't matter what this is set to, Gmail will override it (but keeps the proper name, if any).
                                :reply-to sender
                                :to recipient
                                ;; :to (.getRecipients message javax.mail.Message$RecipientType/TO)
