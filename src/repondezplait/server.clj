@@ -20,7 +20,9 @@
   (:gen-class))
 
 
-(let [{:keys [db]} (mg/connect-via-uri (System/getenv "MONGOLAB_URI"))]
+(let [{:keys [db]} (mg/connect-via-uri "mongodb://heroku_app31322565:uaado7e4a37vp8gflum8m4gu9p@ds051990.mongolab.com:51990/heroku_app31322565"
+                                       (System/getenv "MONGOLAB_URI")
+                                       )]
   (defroutes routes
     (let [template (slurp "resources/email.html")]
       (POST "/incoming" request
