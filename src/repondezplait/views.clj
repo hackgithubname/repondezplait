@@ -68,7 +68,7 @@
           [:td (let [text (:text entry)
                      trunc-length (min 80 (count text))]
                  (str (subs text 0 trunc-length)
-                      (when (> trunc-length (count text))
+                      (when (> (count text) trunc-length)
                         "...")))]
           ;; [:td.spacer]
           [:td]
