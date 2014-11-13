@@ -52,7 +52,11 @@
           [:h1 {:text-align "left"
                 :color emerald}]
           [:.lead {:text-align "right"
-                   :padding-left "40%"}]]])))
+                   :padding-left "40%"}]]]
+
+      [:.responses
+        [:table
+          :.spacer {:width "10%"}]])))
 
 
   ;;   (css

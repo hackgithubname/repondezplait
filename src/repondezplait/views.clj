@@ -31,12 +31,47 @@
            [:script {:src "https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"}]
            [:script {:src "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"}]]))
 
-(def respond
-  (template [:div.respond
-              [:div.jumbotron
-                [:h1 "Thank you!"]
-                [:p.lead "Your response has been recorded and you may change it at any time. You have pleased Nora, high archon of technical recruiting; prepare to recieve her boon."]]]))
-(def responses (template "asdf"))
+(def respond (template
+  [:div.respond
+    [:div.jumbotron
+      [:h1 "Thank you!"]
+      [:p.lead "Your response has been recorded and you may change it at any time. You have pleased Nora, high archon of technical recruiting; prepare to recieve her boon."]]]))
+
+(defn responses [entries] (template
+  [:nav.navbar.navbar-default
+    [:container-fluid
+      [:navbar-header
+        [:span.navbar-brand "Repondezplait!"]]]]
+  [:table.table.table-hover
+    [:thead
+      [:tr
+        [:th "Sent At"]
+        [:th "Sender"]
+        [:th "Recipient"]
+        [:th "Text Preview"]
+        [:th.spacer]
+        [:th "Answered At"]
+        [:th "Answer"]]]
+    [:tbody
+      (for [entry entries]
+        [(keyword (str "th" (case (:answer entry)
+                              true ".success"
+                              false ".danger"
+                              "")))
+          [:th (:sent entry)]
+          [:th (:sender entry)]
+          [:th (:recipient entry)]
+          [:th (let [trunc-length 80
+                     text (:text entry)]
+                 (str (subs text 0 trunc-length)
+                      (when (> trunc-length (count text))
+                        "...")))]
+          [:th.spacer]
+          [:th (:answered_at entry)]
+          [:th (case (:answer entry)
+                 true "Yes"
+                 false "No"
+                 "")]])]]))
 
 ;; (def respond
 ;;   (html [:div.home

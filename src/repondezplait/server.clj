@@ -64,7 +64,8 @@
                                                                     "no" false)})
          views/respond)
 
-    (GET "/responses" [] views/responses)
+    (GET "/responses" []
+         (views/responses (sort-by :sent #(compare %2 %1) (mc/find-maps db "emails"))))
 
     (GET "/style.css" [] {:headers {"Content-Type" "text/css"} :body stylesheet})
     ;; (route/resources "/")
