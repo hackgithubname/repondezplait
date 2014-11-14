@@ -37,14 +37,10 @@
                   new-body #(->> (next raw-body-lines) (join %) (trim))
                   new-body-text (new-body "\n")
                   oid (ObjectId.)
-                  new-message {:from sender
+                  new-message {:from sender :to recipient :subject subject
                                ;; :reply-to sender
-                               :to recipient
-                               ;; :to (.getRecipients message javax.mail.Message$RecipientType/TO)
-                               :subject subject
                                :body [:alternative
-                                      {:type "text/plain; charset=utf-8"
-                                       :content new-body-text}
+                                      {:type "text/plain; charset=utf-8" :content new-body-text}
                                       {:type "text/html; charset=utf-8"
                                        :content (let [url-base (str "http://repondezplait.herokuapp.com/respond/" oid "/")]
                                                   (-> template (replace "{{body}}" (new-body "<br>"))
