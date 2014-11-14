@@ -50,9 +50,7 @@
                                                   (-> template (replace "{{body}}" (new-body "<br>"))
                                                                (replace "{{yes-url}}" (str url-base "yes"))
                                                                (replace "{{no-url}}" (str url-base "no"))))}]}]
-              (let [{:keys [error]} (send-message {:host "smtp.sendgrid.net"
-                                                   :user "app31322565@heroku.com"
-                                                   :pass "s2scv5j7"}
+              (let [{:keys [error]} (send-message {:host "smtp.sendgrid.net" :user "app31322565@heroku.com" :pass "s2scv5j7"}
                                                   new-message)]
                 (when (not= :SUCCESS error)
                   (throw (Exception. error))))
