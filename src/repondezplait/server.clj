@@ -71,23 +71,5 @@
   (ring/run-jetty application {:port (Integer. (or (System/getenv "PORT") 5000))
                                :join? false}))
 
-
-
-
-
-
-;; (println "33")
-;; ;; (println env)
-;; (println (env :production))
-;; (println (env :penis))
-;; (println (env :asdfasdfdsfs))
-;; (println "asdfaf")
-
-
 (defn -main [& args]
   (start))
-
-
-
-;; (if (not (System/getenv "PRODUCTION"))
-;;   (start))
