@@ -36,17 +36,17 @@
                   recipient (-> (first raw-body-lines) (trim))
                   new-body #(->> (next raw-body-lines) (join %) (trim))
                   new-body-text (new-body "\n")
-                  oid (ObjectId.)]
-              (let [new-message {:from sender :to recipient :subject subject
-                                 ;; :reply-to sender
-                                 :body [:alternative
-                                        {:type "text/plain; charset=utf-8" :content new-body-text}
-                                        {:type "text/html; charset=utf-8"
-                                         :content (let [url-base (str "http://repondezplait.herokuapp.com/respond/" oid "/")]
-                                                    (-> template (replace "{{body}}" (new-body "<br>"))
-                                                                 (replace "{{yes-url}}" (str url-base "yes"))
-                                                                 (replace "{{no-url}}" (str url-base "no"))))}]}
-                    {:keys [error]} (send-message {:host "smtp.sendgrid.net" :user "app31322565@heroku.com" :pass "s2scv5j7"}
+                  oid (ObjectId.)
+                  new-message {:from sender :to recipient :subject subject
+                               ;; :reply-to sender
+                               :body [:alternative
+                                      {:type "text/plain; charset=utf-8" :content new-body-text}
+                                      {:type "text/html; charset=utf-8"
+                                       :content (let [url-base (str "http://repondezplait.herokuapp.com/respond/" oid "/")]
+                                                  (-> template (replace "{{body}}" (new-body "<br>"))
+                                                               (replace "{{yes-url}}" (str url-base "yes"))
+                                                               (replace "{{no-url}}" (str url-base "no"))))}]}]
+              (let [{:keys [error]} (send-message {:host "smtp.sendgrid.net" :user "app31322565@heroku.com" :pass "s2scv5j7"}
                                                   new-message)]
                 (when (not= :SUCCESS error)
                   (throw (Exception. error))))
