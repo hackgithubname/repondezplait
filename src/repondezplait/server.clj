@@ -10,8 +10,7 @@
             [monger.collection :as mc]
             [monger.result :refer [ok?]]
             [repondezplait.views :as views]
-            [repondezplait.style :refer [stylesheet]]
-   )
+            [repondezplait.style :refer [stylesheet]])
   (:import [java.util Properties Date]
            [java.io InputStream ByteArrayInputStream]
            [javax.mail Session]
