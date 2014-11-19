@@ -36,7 +36,7 @@
   [:div.respond
     [:div.jumbotron
       [:h1 "Thank you!"]
-      [:p.lead "Your response has been recorded and you may change it at any time. You have pleased Nora, high archon of technical recruiting; prepare to recieve her boon."]]]))
+      [:p.lead "Your response has been recorded and you may change it at any time."]]]))
 
 (defn responses [entries] (template
   [:nav.navbar.navbar-default
