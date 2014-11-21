@@ -28,12 +28,18 @@
                 :border-top "1px solid #e5e5e5"}]
 
       [:.respond
-        [:.jumbotron {:margin-top (px 30)
-                      :margin-bottom (px 200)}
+        [:.jumbotron {:margin-top (px 30)}
           [:h1 {:text-align "left"
                 :color emerald}]
           [:.lead {:text-align "right"
-                   :padding-left "40%"}]]]
+                   :padding-left "40%"}]]
+        [:.feedback {:text-align "center"
+                     :margin-top (px 60)
+                     :margin-bottom (px 200)}
+          [:form {:text-align "center"
+                  :margin-left "auto"
+                  :margin-right "auto"
+                  :width "50%"}]]]
 
       ;; [:.responses
       ;;   [:table

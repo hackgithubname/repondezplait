@@ -30,13 +30,28 @@
              [:footer.footer
                [:p "© Nora Hamada 2014"]]]
            [:script {:src "https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"}]
-           [:script {:src "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"}]]))
+           [:script {:src "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"}]
+           [:script {:src "/scripts.js"}]]))
 
-(def respond (template
+(defn respond [answer id] (template
   [:div.respond
     [:div.jumbotron
       [:h1 "Thank you!"]
-      [:p.lead "Your response has been recorded and you may change it at any time."]]]))
+      [:p.lead "Your response has been recorded and you may change it at any time."]]
+    (when-not answer
+      [:div.feedback
+        [:form
+          [:input {:type "hidden"
+                   :name "id"
+                   :value id}]
+          [:div.form-group
+            [:label "If you have a moment, we'd really like to know the reason you're not interested."]
+            [:textarea.form-control {:name "feedback"
+                                     :rows 3}]]
+          [:button.btn.btn-primary {:type "submit"}
+          "Give Feedback"]]
+        [:img {:style "display: none;"
+               :src "http://designmodo.github.io/Flat-UI/img/icons/svg/retina.svg"}]])]))
 
 (defn responses [entries] (template
   [:nav.navbar.navbar-default
@@ -54,7 +69,8 @@
         ;; [:th.spacer]
         [:th "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"]
         [:th "Answered At"]
-        [:th "Answer"]]]
+        [:th "Answer"]
+        [:th "Feedback"]]]
     [:tbody
       (for [entry entries]
         [(keyword (str "tr" (case (:answer entry)
@@ -76,7 +92,8 @@
           [:td (case (:answer entry)
                  true "Yes"
                  false "No"
-                 "")]])]]))
+                 "")]
+          [:td (:feedback entry)]])]]))
 
 ;; (def respond
 ;;   (html [:div.home

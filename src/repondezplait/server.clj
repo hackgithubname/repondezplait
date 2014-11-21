@@ -53,14 +53,21 @@
             {:status 200 :headers {"Content-Type" "text/plain"}})) ; Tell mail2webhook everything worked, otherwise it'll bounce the original email.
 
     (GET "/respond/:id/:answer" [id answer]
-         (mc/update-by-id db "emails" (ObjectId. id) {:$set {:answered_at (Date.)
-                                                             :answer (case answer "yes" true "no" false)}})
-         views/respond)
+         (let [sanitized-answer (case answer
+                                  "yes" true
+                                  "no" false)]
+           (mc/update-by-id db "emails" (ObjectId. id) {:$set {:answered_at (Date.)
+                                                               :answer sanitized-answer}})
+           (views/respond sanitized-answer id)))
 
     (GET "/responses" [] (views/responses (sort-by :sent #(compare %2 %1) (mc/find-maps db "emails"))))
 
+    (POST "/data/feedback" [id feedback]
+          (mc/update-by-id db "emails" (ObjectId. id) {:$set {:feedback feedback}})
+          {:status 200})
+
     (GET "/style.css" [] {:headers {"Content-Type" "text/css"} :body stylesheet})
-    ;; (route/resources "/")
+    (route/resources "/")
     ;; (GET "*" [] views/index)
     (route/not-found "Not Found!")))
 
