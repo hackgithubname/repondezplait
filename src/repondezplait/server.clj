@@ -25,7 +25,7 @@
   (defroutes routes
     (let [template (slurp "resources/email.html")]
       (POST "/incoming" request
-            (let [message (let [content (get-in request [:params :message])
+            (let [message (let [content (get-in request [:params :message]) ; I could just use request destructuring here.
                                 session (Session/getDefaultInstance (Properties.))
                                 stream (ByteArrayInputStream. (.getBytes content))]
                             (MimeMessage. session stream))
